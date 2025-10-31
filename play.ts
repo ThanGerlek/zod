@@ -25,3 +25,19 @@ const DateSchema = refineTemplateLiteral(
 console.log(DateSchema.safeParse("7,11"));  // Valid
 console.log(DateSchema.safeParse("31/11"));  // Invalid (doesn't match schema)
 console.log(DateSchema.safeParse("31,11"));  // Invalid (failed verify)
+
+
+/*
+const rangeSchema = z
+    .templateLiteral([z.int(), z.int()])
+    .splitRefine("-", values => values[0] <= values[1])
+*/
+
+const rangeSchema = refineTemplateLiteral(  // TODO  never?
+    [z.int(), z.int()],
+    "-",
+    values => values[0] <= values[1]
+)
+
+// Performance testing?
+// Analyze time complexity more deeply
