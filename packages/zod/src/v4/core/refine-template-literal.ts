@@ -27,11 +27,6 @@ type InsertDelimiterIntoTuple<Parts extends readonly T[], Delimiter extends T, T
       ? [First, Delimiter, ...InsertDelimiterIntoTuple<Rest, Delimiter, T>]
       : never;
 
-// Type-preserving version of str.spit
-function splitIntoTemplateLiterals<S extends string, D extends string>(str: S, delimiter: D): SplitString<S, D> {
-  return str.split(delimiter) as unknown as SplitString<S, D>;
-}
-
 // Type-preserving version of mapping safeParse over an array
 function mapSafeParse<
   const Parts extends readonly (core.$ZodTemplateLiteralPart & ZodType)[],
@@ -58,6 +53,11 @@ type MapOutput<Parts extends readonly ZodType[]> = Parts extends readonly []
       ? readonly [z.output<First>, ...MapOutput<Rest>]
       : never;
 
+// Type-preserving version of str.split
+function splitString<S extends string, D extends string>(str: S, delimiter: D): SplitString<S, D> {
+  return str.split(delimiter) as unknown as SplitString<S, D>;
+}
+
 // Type-level equivalent of str.split
 type SplitString<S extends string, D extends string> = D extends ""
   ? S extends ""
@@ -65,10 +65,11 @@ type SplitString<S extends string, D extends string> = D extends ""
     : StringToCharTuple<S>
   : S extends ""
     ? readonly [""]
-    : S extends `${infer Head}${D}${infer Tail}`
-      ? readonly [Head, ...SplitString<Tail, D>]
+    : S extends `${infer First}${D}${infer Rest}`
+      ? readonly [First, ...SplitString<Rest, D>]
       : readonly [S];
-// helper: split a non-empty string into its characters
+
+// Helper: split a non-empty string into its characters
 type StringToCharTuple<S extends string> = S extends `${infer First}${infer Rest}`
   ? readonly [First, ...StringToCharTuple<Rest>]
   : readonly [];
@@ -91,7 +92,7 @@ export function refineTemplateLiteral<
     insertDelimiterIntoTuple(parts, delim);
 
   return z.templateLiteral(partsWithSeparators, templateLiteralParams).refine((compositeValue) => {
-    const unparsedValues = splitIntoTemplateLiterals(compositeValue, delim);
+    const unparsedValues = splitString(compositeValue, delim); // should have type `SplitString<typeof compositeValue, typeof delim>`
     const results = mapSafeParse(parts, unparsedValues); // TODO? Length verification?
     if (!results.every((x) => x.success)) {
       return false;
