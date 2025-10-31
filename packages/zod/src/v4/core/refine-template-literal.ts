@@ -41,7 +41,7 @@ type MapSafeParse<Parts extends readonly ZodType[]> = Parts extends readonly []
   : Parts extends readonly [infer First extends ZodType]
     ? readonly [ZodSafeParseResult<First>]
     : Parts extends readonly [infer First extends ZodType, ...infer Rest extends readonly ZodType[]]
-      ? readonly [ZodSafeParseResult<First>, ...MapOutput<Rest>]
+      ? readonly [ZodSafeParseResult<First>, ...MapSafeParse<Rest>]
       : never;
 
 // Type-level equivalent of mapping z.output over an array
