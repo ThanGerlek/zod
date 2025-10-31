@@ -1,5 +1,7 @@
 import z, { type ZodSafeParseResult, type core, type ZodType } from "zod/v4";
 
+// TODO Move into ZodTemplateLiteral
+
 // Type-preserving version of array.join
 function insertDelimiterIntoTuple<const Parts extends readonly T[], Delimiter extends T, T = unknown>(
   lst: Parts,
