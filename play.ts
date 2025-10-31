@@ -2,7 +2,8 @@ import z from "zod";
 import { refineTemplateLiteral } from "./packages/zod/src/v4/core/refine-template-literal.js";
 
 const DaySchema = z.int().positive();
-const MonthSchema = z.number().positive().max(11);
+const MonthSchema = z.number().positive().max(12);
+
 const verify = (vals: readonly [number, number]) => {
     if ([4, 6, 9, 11].includes(vals[1])) {
         return vals[0] <= 30;
