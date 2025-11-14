@@ -1499,7 +1499,7 @@ test("override", () => {
 test("override: do not run on references", () => {
   let overrideCount = 0;
   const schema = z
-    .union([z.string().date(), z.string().datetime(), z.string().datetime({ local: true })])
+    .union([z.iso.date(), z.iso.datetime(), z.iso.datetime({ local: true })])
     .meta({ a: true })
     .transform((str) => new Date(str))
     .meta({ b: true })

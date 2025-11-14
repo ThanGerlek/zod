@@ -644,7 +644,7 @@ test("string error params", () => {
   const c = z.uuid("Bad UUID!");
   expect(c.safeParse("not-a-uuid").error!.issues[0].message).toBe("Bad UUID!");
 
-  const d = z.string().datetime({ message: "Bad date!" });
+  const d = z.iso.datetime({ message: "Bad date!" });
   expect(d.safeParse("not-a-date").error!.issues[0].message).toBe("Bad date!");
 
   const e = z.array(z.string(), "Bad array!");

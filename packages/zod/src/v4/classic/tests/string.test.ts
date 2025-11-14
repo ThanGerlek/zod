@@ -771,10 +771,10 @@ test("format", () => {
   expect(z.string().ipv4().format).toEqual("ipv4");
   expect(z.string().ipv6().format).toEqual("ipv6");
   expect(z.string().e164().format).toEqual("e164");
-  expect(z.string().datetime().format).toEqual("datetime");
-  expect(z.string().date().format).toEqual("date");
-  expect(z.string().time().format).toEqual("time");
-  expect(z.string().duration().format).toEqual("duration");
+  expect(z.iso.datetime().format).toEqual("datetime");
+  expect(z.iso.date().format).toEqual("date");
+  expect(z.iso.time().format).toEqual("time");
+  expect(z.iso.duration().format).toEqual("duration");
 });
 
 test("min max getters", () => {
